@@ -22,7 +22,7 @@ Apollo Client
 ## Backend
 
 GraphQL Yoga
-
+- proxies requests to the server
 - Implementing **Query** and **Mutation Resolvers**
 - Custom **Server Side Logic**
 - **Charging** Credit Cards
