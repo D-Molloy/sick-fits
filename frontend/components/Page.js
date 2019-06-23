@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+import styled, { ThemeProvider, injectGlobal } from "styled-components";
+
 import Header from "./Header";
 import Meta from "./Meta";
-import styled, { ThemeProvider, injectGlobal } from "styled-components";
 
 const theme = {
   red: "#FF0000",
@@ -13,6 +14,38 @@ const theme = {
   // bs === box-shadow
   bs: "0 12px 24px 0 rgba(0, 0, 0, 0.09)"
 };
+
+// Need to call injectGlobal in order for it to inject the theme globally
+injectGlobal`
+  @font-face {
+    font-family: "radnika_next" ;
+    src: url("/static/radnikanext-medium-webfont.woff2")
+    format("woff2");
+    font-weight: normal;
+    font-style: normal;
+  }
+  html{
+    box-sizing: border-box;
+    font-size: 10px;
+  }
+/* the best way to setup box-sizing: border box.  Setup on root (above) and set EVERYTHING to inherit that (below)  */
+  *, *:before, *:after{
+    box-sizing: inherit;
+  }
+
+  body{
+    padding: 0;
+    margin: 0;
+    /* b/c font size is set to 10px, that means that all fonts will be base-10, meaning 1.5rem will be 15px */
+    font-size: 1.5rem;
+    line-height: 2;
+    font-family:"radnika_next";
+  }
+  a{
+    text-decoration: none;
+    color: ${theme.black}
+  }
+`;
 
 const StyledPage = styled.div`
   background: white;
