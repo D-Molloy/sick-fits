@@ -7,7 +7,7 @@
 React.js
 
 - **Next.js** for server side rendering, routing and tooling
-- **Styled Components** for styling
+- **Styled Components** for CSS-in-JS styling
 - **React-Apollo** - for interfacing with Apollo Client
 
 Apollo Client
@@ -22,6 +22,7 @@ Apollo Client
 ## Backend
 
 GraphQL Yoga
+
 - proxies requests to the server
 - Implementing **Query** and **Mutation Resolvers**
 - Custom **Server Side Logic**
