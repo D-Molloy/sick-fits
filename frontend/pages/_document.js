@@ -1,7 +1,7 @@
 import Document, { Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 /**
- *  Document is provided by Next.js.  Without using _document.js, the intial page will render, then styled components will kick, causing the page to flicker between not styled /styled.
+ *  Document is provided by Next.js.  Without using _document.js, the initial page will render, then styled components will kick, causing the page to flicker between not styled /styled.
  *  _document crawls the DOM and loads all the necessary styles first, then the server renders the page
  */
 
