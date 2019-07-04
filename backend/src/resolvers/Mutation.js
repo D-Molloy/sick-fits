@@ -1,7 +1,6 @@
 const mutations = {
   async createItem(parent, args, ctx, info) {
     // TODO: Check if the user is logged in
-
     // Our API for the prisma db is defined in prisma.graphql under `type Mutations`
     // ctx has a db property due to our exposing of the db to the context in createServer.js
     // info param contains the query
