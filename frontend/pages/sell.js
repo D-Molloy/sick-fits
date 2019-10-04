@@ -1,5 +1,6 @@
 import CreateItem from "../components/CreateItem";
 
-export default function Sell() {
+const Sell = props => {
   return <CreateItem />;
-}
+};
+export default Sell;

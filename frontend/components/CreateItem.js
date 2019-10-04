@@ -55,7 +55,7 @@ class CreateItem extends Component {
       }
     );
     const file = await res.json();
-
+    console.log(file);
     this.setState({
       image: file.secure_url,
       largeImage: file.eager[0].secure_url
@@ -92,10 +92,14 @@ class CreateItem extends Component {
                   // value={this.state.image}
                   onChange={this.uploadFile}
                 />
+                {this.state.image && (
+                  <img
+                    src={this.state.image}
+                    alt="Upload Preview"
+                    width="200"
+                  />
+                )}
               </label>
-              {this.state.image && (
-                <img src={this.state.image} alt="Upload Preview" width="200" />
-              )}
               <label htmlFor="title">
                 Title
                 <input
