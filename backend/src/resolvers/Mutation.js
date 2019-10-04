@@ -17,14 +17,33 @@ const mutations = {
     );
     // console.log(item)
     return item;
+  },
+  updateItem(parent, args, ctx, info) {
+    // ctx - content in the request
+    // db - get access to the Prisma db
+    // query/mutation - accss to all of the queries in the generated\prisma.graphql (our api)
+
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates - we can't update the id so we want to remove it from the updates
+    delete updates.id;
+    // run update method
+    // updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
+    // data - the update data
+    // where - which item to update
+    // info - contains the query from the client side and tells it what to return
+    return ctx.db.mutation.updateItem(
+      { data: updates, where: { id: args.id } },
+      info
+    );
   }
-  // createDog(parent, args, ctx, info) {
-  //   global.dogs = global.dogs || [];
-  //   // create a dog
-  //   const newDog = { name: args.name };
-  //   global.dogs.push(newDog);
-  //   return newDog;
-  // }
 };
+// createDog(parent, args, ctx, info) {
+//   global.dogs = global.dogs || [];
+//   // create a dog
+//   const newDog = { name: args.name };
+//   global.dogs.push(newDog);
+//   return newDog;
+// }
 
 module.exports = mutations;

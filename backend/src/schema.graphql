@@ -1,9 +1,3 @@
-# anything in schema.graphql is visible in the API
-# this is the public facing gql api
-# datamodel.prisma and prisma.graphql are used by prisma to setup the types and generate the basic CRUD functionality
-
-# importssss types from datamodel.prisma to DRY code.  Imports aren't standard in graphql, so you have to use the prisma method  in a comment:
-
 # import * from './generated/prisma.graphql'
 
 type Mutation {
@@ -14,8 +8,10 @@ type Mutation {
     image: String
     largeImage: String
   ): Item!
+  updateItem(id: ID!, title: String, description: String, price: Int): Item!
 }
 
 type Query {
   items: [Item]!
+  item(where: ItemWhereUniqueInput!): Item
 }

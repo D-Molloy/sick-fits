@@ -12,7 +12,8 @@
 // if our query is the exact same as the query in prisma.graphql we can forward it to prisma directly
 const { forwardTo } = require("prisma-binding");
 const Query = {
-  items: forwardTo("db")
+  items: forwardTo("db"),
+  item: forwardTo("db")
   // NOT USING FORWARDTO:
   // async items(parent, args, ctx, info) {
   //   const items = await ctx.db.query.items();
