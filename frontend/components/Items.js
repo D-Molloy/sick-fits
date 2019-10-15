@@ -52,4 +52,5 @@ class Items extends Component {
 }
 
 export default Items;
+// this is exported so that we can use it to update the cache in DeleteItem
 export { ALL_ITEMS_QUERY };
