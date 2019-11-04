@@ -3,7 +3,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import Form from "./styles/Form";
 import Error from "./ErrorMessage";
-
+import { CURRENT_USER_QUERY } from "./User";
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
     $email: String!
@@ -32,14 +32,18 @@ class Signup extends Component {
 
   render() {
     return (
-      <Mutation mutation={SIGNUP_MUTATION} variables={this.state}>
+      <Mutation
+        mutation={SIGNUP_MUTATION}
+        variables={this.state}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+      >
         {(signup, { error, loading }) => {
           return (
             <Form
               method="post"
               onSubmit={async e => {
                 e.preventDefault();
-                await signup();
+                const result = await signup();
                 console.log(result);
                 this.setState({ name: "", email: "", password: "" });
               }}
@@ -62,6 +66,7 @@ class Signup extends Component {
                   <input
                     type="email"
                     name="email"
+                    autoComplete="email"
                     placeholder="your@email.com"
                     value={this.state.email}
                     onChange={this.saveToState}
@@ -72,6 +77,7 @@ class Signup extends Component {
                   <input
                     type="password"
                     name="password"
+                    autoComplete="off"
                     placeholder="topSecretPassword"
                     value={this.state.password}
                     onChange={this.saveToState}

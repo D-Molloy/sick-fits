@@ -1,6 +1,6 @@
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
 
 const CURRENT_USER_QUERY = gql`
   query {
@@ -24,8 +24,8 @@ const User = props => {
 //.children(payload) allows us to pass the payload from the query to any User component:
 //   <User>{payload=> }</User>
 
-User.PropTypes = {
-  children: PropTypes.func.isRequired
+User.propTypes = {
+  children: propTypes.func.isRequired
 };
 
 export default User;
