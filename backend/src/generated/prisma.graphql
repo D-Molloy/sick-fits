@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/denis-molloy-4ca06c/webo-gql/dev
-# timestamp: Tue Oct 22 2019 23:03:20 GMT-0700 (Pacific Daylight Time)
+# timestamp: Sun Nov 03 2019 17:39:11 GMT-0800 (Pacific Standard Time)
 
 type AggregateItem {
   count: Int!
@@ -862,4 +862,5 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
+  email: String
 }
