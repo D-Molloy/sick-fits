@@ -11,6 +11,10 @@ const MAX_AGE = 1000 * 60 * 60 * 24 * 365;
 const mutations = {
   async createItem(parent, args, ctx, info) {
     // TODO: Check if the user is logged in
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that.");
+    }
+
     // Our API for the prisma db is defined in prisma.graphql under `type Mutations`
     // ctx has a db property due to our exposing of the db to the context in createServer.js
     // info param contains the query
@@ -19,6 +23,12 @@ const mutations = {
     const item = await ctx.db.mutation.createItem(
       {
         data: {
+          // this is how we create a relationship between an item and a user
+          user: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
           // we could manually place everything from the args in this object (name, image, etc)
           ...args
         }
