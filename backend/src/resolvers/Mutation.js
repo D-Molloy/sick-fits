@@ -4,6 +4,8 @@ const { randomBytes } = require("crypto");
 // take callback based functions and turns them into promise based functions
 const { promisify } = require("util");
 
+const { transport, makeANiceEmail } = require("../mail");
+
 const MAX_AGE = 1000 * 60 * 60 * 24 * 365;
 
 const mutations = {
@@ -121,8 +123,22 @@ const mutations = {
       data: { resetToken, resetTokenExpiry }
     });
 
-    return { message: "Thanks!" };
     // 3 - Email them that reset token
+    try {
+      const mailRes = await transport.sendMail({
+        from: "denis.molloy@gmail.com",
+        to: user.email,
+        subject: "Your password reset token",
+        html: makeANiceEmail(
+          `Your password reset token is here!!\n\n<a href="${process.env.FRONTEND_URL}/reset?resetToken=${resetToken}">Click Here To Reset</a>`
+        )
+      });
+    } catch (e) {
+      console.log("Reset email failed to send: ", e);
+    }
+
+    // 4 - Return the message
+    return { message: "Thanks!" };
   },
 
   async resetPassword(parent, args, ctx, info) {
