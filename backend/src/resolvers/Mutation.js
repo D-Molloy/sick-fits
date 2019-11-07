@@ -4,11 +4,17 @@ const { randomBytes } = require("crypto");
 // take callback based functions and turns them into promise based functions
 const { promisify } = require("util");
 
+const { transport, makeANiceEmail } = require("../mail");
+
 const MAX_AGE = 1000 * 60 * 60 * 24 * 365;
 
 const mutations = {
   async createItem(parent, args, ctx, info) {
     // TODO: Check if the user is logged in
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to do that.");
+    }
+
     // Our API for the prisma db is defined in prisma.graphql under `type Mutations`
     // ctx has a db property due to our exposing of the db to the context in createServer.js
     // info param contains the query
@@ -17,6 +23,12 @@ const mutations = {
     const item = await ctx.db.mutation.createItem(
       {
         data: {
+          // this is how we create a relationship between an item and a user
+          user: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
           // we could manually place everything from the args in this object (name, image, etc)
           ...args
         }
@@ -121,8 +133,22 @@ const mutations = {
       data: { resetToken, resetTokenExpiry }
     });
 
-    return { message: "Thanks!" };
     // 3 - Email them that reset token
+    try {
+      const mailRes = await transport.sendMail({
+        from: "denis.molloy@gmail.com",
+        to: user.email,
+        subject: "Your password reset token",
+        html: makeANiceEmail(
+          `Your password reset token is here!!\n\n<a href="${process.env.FRONTEND_URL}/reset?resetToken=${resetToken}">Click Here To Reset</a>`
+        )
+      });
+    } catch (e) {
+      console.log("Reset email failed to send: ", e);
+    }
+
+    // 4 - Return the message
+    return { message: "Thanks!" };
   },
 
   async resetPassword(parent, args, ctx, info) {
