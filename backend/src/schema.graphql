@@ -35,6 +35,8 @@ type Query {
   item(where: ItemWhereUniqueInput!): Item
   itemsConnection(where: ItemWhereInput): ItemConnection!
   me: User
+  # bang after the array because the array is required, but it might be empty
+  users: [User]!
 }
 
 type User {

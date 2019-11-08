@@ -77,6 +77,7 @@ const mutations = {
         data: {
           ...args,
           password,
+          // define newly created user permissions here
           permissions: { set: ["USER"] }
         }
       },
