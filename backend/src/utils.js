@@ -1,3 +1,11 @@
+// take the user obj
+// {
+//   name:"Denis",
+//   permissions:["ADMIN", "ITEMUPDATE"]
+// }
+// and check to see if they have these (eg):
+// ['PERMISSIONUPDATE', 'ADMIN]
+
 function hasPermission(user, permissionsNeeded) {
   const matchedPermissions = user.permissions.filter(permissionTheyHave =>
     permissionsNeeded.includes(permissionTheyHave)

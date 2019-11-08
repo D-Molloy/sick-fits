@@ -11,6 +11,8 @@
 
 // if our query is the exact same as the query in prisma.graphql we can forward it to prisma directly
 const { forwardTo } = require("prisma-binding");
+const { hasPermission } = require("../utils");
+
 const Query = {
   items: forwardTo("db"),
   item: forwardTo("db"),
@@ -27,12 +29,23 @@ const Query = {
       },
       info
     ); //info is the query coming from the request (cart data)
+    // NOT USING FORWARDTO:
+    // async items(parent, args, ctx, info) {
+    //   const items = await ctx.db.query.items();
+    //   return items;
+    // }
+  },
+  async users(parent, args, ctx, info) {
+    // 1 check if the are logged in
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in.");
+    }
+    // 2 check if the user has the permissions to query all users
+    hasPermission(ctx.request.user, ["ADMIN", "PERMISSIONUPDATE"]);
+
+    // 3 if the do, query all the users
+    return ctx.db.query.users({}, info);
   }
-  // NOT USING FORWARDTO:
-  // async items(parent, args, ctx, info) {
-  //   const items = await ctx.db.query.items();
-  //   return items;
-  // }
 };
 
 module.exports = Query;
