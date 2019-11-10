@@ -18,9 +18,8 @@ const Query = {
   item: forwardTo("db"),
   itemsConnection: forwardTo("db"),
   me(parent, args, ctx, info) {
-    // check if there is a current userId
+    // check if there is a current user ID
     if (!ctx.request.userId) {
-      //returning null to return nothing instead of throwing an error
       return null;
     }
     return ctx.db.query.user(
@@ -28,22 +27,18 @@ const Query = {
         where: { id: ctx.request.userId }
       },
       info
-    ); //info is the query coming from the request (cart data)
-    // NOT USING FORWARDTO:
-    // async items(parent, args, ctx, info) {
-    //   const items = await ctx.db.query.items();
-    //   return items;
-    // }
+    );
   },
   async users(parent, args, ctx, info) {
-    // 1 check if the are logged in
+    // 1. Check if they are logged in
     if (!ctx.request.userId) {
-      throw new Error("You must be logged in.");
+      throw new Error("You must be logged in!");
     }
-    // 2 check if the user has the permissions to query all users
+    console.log(ctx.request.userId);
+    // 2. Check if the user has the permissions to query all the users
     hasPermission(ctx.request.user, ["ADMIN", "PERMISSIONUPDATE"]);
 
-    // 3 if the do, query all the users
+    // 2. if they do, query all the users!
     return ctx.db.query.users({}, info);
   }
 };
