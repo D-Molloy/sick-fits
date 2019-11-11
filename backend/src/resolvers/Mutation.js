@@ -269,6 +269,34 @@ const mutations = {
       },
       info
     );
+  },
+  async removeFromCart(parent, args, ctx, info) {
+    // 1- find the cart item
+    const cartItem = await ctx.db.query.cartItem(
+      {
+        where: {
+          id: args.id
+        }
+      },
+      `{id, user{id}}`
+    );
+
+    // 1.5 make sure we found an item
+    if (!cartItem) throw new Error("No CartItem found!");
+
+    // 2- make sure they own that cart item
+    if (cartItem.user.id !== ctx.request.userId) {
+      throw new Error("You can't edit a cart that isn't yours.");
+    }
+    // 3 - delete that cart item
+    return ctx.db.mutation.deleteCartItem(
+      {
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
   }
 };
 // createDog(parent, args, ctx, info) {
