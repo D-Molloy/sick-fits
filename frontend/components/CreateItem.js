@@ -36,7 +36,12 @@ class CreateItem extends Component {
   };
   handleChange = e => {
     const { name, type, value } = e.target;
+
     const val = type === "number" ? parseFloat(value) : value;
+    if (val > 99999999) {
+      this.setState({ price: 0 });
+      alert("Maximum price is $999,999.99");
+    }
     this.setState({ [name]: val });
   };
 
@@ -55,7 +60,6 @@ class CreateItem extends Component {
       }
     );
     const file = await res.json();
-    console.log(file);
     this.setState({
       image: file.secure_url,
       largeImage: file.eager[0].secure_url
