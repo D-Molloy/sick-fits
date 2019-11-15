@@ -5,6 +5,7 @@ const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { hasPermission } = require("../utils");
 const { transport, makeANiceEmail } = require("../mail");
+const stripe = require("../stripe");
 
 const MAX_AGE = 1000 * 60 * 60 * 24 * 365;
 
@@ -297,6 +298,47 @@ const mutations = {
       },
       info
     );
+  },
+  async createOrder(parent, args, ctx, info) {
+    // 1. Query the current user and make sure they are signed in
+    const { userId } = ctx.request;
+    if (!userId)
+      throw new Error("You must be signed in to complete this order.");
+    const user = await ctx.db.query.user(
+      { where: { id: userId } },
+      // manual query
+      `{
+      id
+      name
+      email
+      cart {
+        id
+        quantity
+        item { title price id description image }
+      }}`
+    );
+    // 2. recalculate the total for the price - important to recalculate the price server side to avoid users maliciously changing the price of the course client-side
+    // amount is in cents, which is best for JS
+    const amount = user.cart.reduce(
+      (tally, cartItem) => tally + cartItem.item.price * cartItem.quantity,
+      0
+    );
+    console.log(`Going to charge for a total of ${amount}`);
+    // 3. Create the stripe charge (turn token into $$$)
+
+    const charge = await stripe.charges.create({
+      amount,
+      currency: "USD",
+      // the token we received from the client side
+      source: args.token
+      // can also add a description property that will show up in Stripe console.
+    });
+
+    // 4. Convert the CartItems to OrderItems
+
+    // 5. create the Order
+    // 6. Clean up - clear the users cart, delete cartItems
+    // 7. Return the Order to the client
   }
 };
 // createDog(parent, args, ctx, info) {
