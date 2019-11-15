@@ -306,7 +306,6 @@ const mutations = {
       throw new Error("You must be signed in to complete this order.");
     const user = await ctx.db.query.user(
       { where: { id: userId } },
-      // manual query
       `{
       id
       name
@@ -314,31 +313,50 @@ const mutations = {
       cart {
         id
         quantity
-        item { title price id description image }
+        item { title price id description image largeImage }
       }}`
     );
-    // 2. recalculate the total for the price - important to recalculate the price server side to avoid users maliciously changing the price of the course client-side
-    // amount is in cents, which is best for JS
+    // 2. recalculate the total for the price
     const amount = user.cart.reduce(
       (tally, cartItem) => tally + cartItem.item.price * cartItem.quantity,
       0
     );
-    console.log(`Going to charge for a total of ${amount}`);
-    // 3. Create the stripe charge (turn token into $$$)
 
+    // 3. Create the stripe charge (turn token into $$$)
     const charge = await stripe.charges.create({
       amount,
       currency: "USD",
-      // the token we received from the client side
       source: args.token
-      // can also add a description property that will show up in Stripe console.
+    });
+    // 4. Convert the CartItems to OrderItems
+    const orderItems = user.cart.map(cartItem => {
+      const orderItem = {
+        ...cartItem.item,
+        quantity: cartItem.quantity,
+        user: { connect: { id: userId } }
+      };
+      delete orderItem.id;
+      return orderItem;
     });
 
-    // 4. Convert the CartItems to OrderItems
-
     // 5. create the Order
+    const order = await ctx.db.mutation.createOrder({
+      data: {
+        total: charge.amount,
+        charge: charge.id,
+        items: { create: orderItems },
+        user: { connect: { id: userId } }
+      }
+    });
     // 6. Clean up - clear the users cart, delete cartItems
+    const cartItemIds = user.cart.map(cartItem => cartItem.id);
+    await ctx.db.mutation.deleteManyCartItems({
+      where: {
+        id_in: cartItemIds
+      }
+    });
     // 7. Return the Order to the client
+    return order;
   }
 };
 // createDog(parent, args, ctx, info) {
