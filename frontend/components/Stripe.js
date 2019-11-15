@@ -30,17 +30,19 @@ function totalItems(cart) {
 class Stripe extends React.Component {
   // Stripe test credit cards = https://stripe.com/docs/testing
   // normal Visa - 4242424242424242 - any 3 #s for security - any future date
-  onToken = (res, createOrder) => {
+  onToken = async (res, createOrder) => {
     // res.id is the payment token
     console.log("res", res.id);
     // manually call createOrder mutation once we have the token
-    createOrder({
+    const order = await createOrder({
       variables: {
         token: res.id
       }
     }).catch(err => {
       alert(err.message);
     });
+
+    console.log("order", order);
   };
   render() {
     return (
@@ -56,7 +58,10 @@ class Stripe extends React.Component {
                 name="Sick Fits"
                 description={`Order of ${totalItems(me.cart)} items.`}
                 // select an item image to appear on the stripe checkout.  Could be a site logo. Wes shows an item from the cart
-                image={me.cart[0].item && me.cart[0].item.image}
+
+                image={
+                  me.cart.length && me.cart[0].item && me.cart[0].item.image
+                }
                 stripeKey="pk_test_hrdarMCPT2iY6Uu8CflnyFP800n8hI02Gu"
                 currency="USD"
                 email={me.email}
