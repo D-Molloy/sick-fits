@@ -31,6 +31,7 @@ class Stripe extends React.Component {
   // Stripe test credit cards = https://stripe.com/docs/testing
   // normal Visa - 4242424242424242 - any 3 #s for security - any future date
   onToken = async (res, createOrder) => {
+    NProgress.start();
     // res.id is the payment token
     console.log("res", res.id);
     // manually call createOrder mutation once we have the token
@@ -42,7 +43,10 @@ class Stripe extends React.Component {
       alert(err.message);
     });
 
-    console.log("order", order);
+    Router.push({
+      pathname: "/order",
+      query: { id: order.data.createOrder.id }
+    });
   };
   render() {
     return (
