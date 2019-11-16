@@ -3,13 +3,14 @@ import { Query, Mutation } from "react-apollo";
 import { adopt } from "react-adopt";
 import gql from "graphql-tag";
 import User from "./User";
-import calcTotalPrice from "../lib/calcTotalPrice";
-import formatMoney from "../lib/formatMoney";
 import CartStyles from "./styles/CartStyles";
 import Supreme from "./styles/Supreme";
 import CloseButton from "./styles/CloseButton";
 import SickButton from "./styles/SickButton";
 import CartItem from "./CartItem";
+import calcTotalPrice from "../lib/calcTotalPrice";
+import formatMoney from "../lib/formatMoney";
+import Stripe from "./Stripe";
 
 const LOCAL_STATE_QUERY = gql`
   query {
@@ -60,7 +61,13 @@ const Cart = () => {
 
             <footer>
               <p>{formatMoney(calcTotalPrice(me.cart))}</p>
-              <SickButton>Checkout</SickButton>
+              {me.cart.length ? (
+                <Stripe>
+                  <SickButton>Checkout</SickButton>
+                </Stripe>
+              ) : (
+                <SickButton disabled>Add an item to your cart.</SickButton>
+              )}
             </footer>
           </CartStyles>
         );
