@@ -1,5 +1,7 @@
 import ItemComponent from "../components/Item";
 import { shallow } from "enzyme";
+import toJSON from "enzyme-to-json";
+
 const fakeItem = {
   id: "ABC123",
   title: "A Cool Item",
@@ -16,7 +18,7 @@ const fakeItem = {
 // console.log(PriceTag.dive().text()); // $40
 // .children will give you the actual child
 // console.log(PriceTag.children().text());
-describe("<Item/>", () => {
+describe("<Item/> Unit Testing", () => {
   it("renders PriceTag and Title properly properly", () => {
     // Mounting the wrapper
     const wrapper = shallow(<ItemComponent item={fakeItem} />);
@@ -50,5 +52,20 @@ describe("<Item/>", () => {
     expect(buttonList.find("AddToCart").exists()).toBe(true);
     // expect(buttonList.find("RemoveFromCart").exists()).toBe(true); //false
     expect(buttonList.find("DeleteItem").exists()).toBe(true);
+  });
+});
+
+/**
+ *  - SNAPSHOT TESTING
+ */
+describe("<Item /> snapshot testing", () => {
+  it("renders and matches the snapshot", () => {
+    // const price = "$50,35";
+    // // toMatchSnapshot creates the __snapshots__ folder
+    // expect(price).toMatchSnapshot();
+
+    // -----------
+    const wrapper = shallow(<ItemComponent item={fakeItem} />);
+    expect(toJSON(wrapper)).toMatchSnapshot();
   });
 });
