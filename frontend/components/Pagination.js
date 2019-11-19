@@ -5,8 +5,8 @@ import PaginationStyles from "./styles/PaginationStyles";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import { perPage } from "../config";
-const PAGEINATION_QUERY = gql`
-  query PAGEINATION_QUERY {
+const PAGINATION_QUERY = gql`
+  query PAGINATION_QUERY {
     itemsConnection {
       aggregate {
         count
@@ -17,15 +17,19 @@ const PAGEINATION_QUERY = gql`
 
 const Pagination = props => {
   return (
-    <Query query={PAGEINATION_QUERY}>
+    <Query query={PAGINATION_QUERY}>
       {({ data, loading, error }) => {
-        const count = data.itemsConnection.aggregate.count;
-        const pages = Math.ceil(count / perPage);
         const { page } = props;
+        let count;
+        if (data.itemsConnection) {
+          count = data.itemsConnection.aggregate.count;
+        }
+        const pages = Math.ceil(count / perPage);
+        // console.log(error);
         if (loading) return <p>Loading...</p>;
 
         return (
-          <PaginationStyles>
+          <PaginationStyles data-test="pagination">
             <Head>
               <title>
                 Sick Fits | Page {page} of {pages}
@@ -44,7 +48,7 @@ const Pagination = props => {
               </a>
             </Link>
             <p>
-              You are on page {page} of {pages}
+              Page {page} of <span className="totalPages">{pages}</span>
             </p>
 
             <p>{count} items total</p>
@@ -56,7 +60,7 @@ const Pagination = props => {
                 query: { page: page + 1 }
               }}
             >
-              <a className="prev" aria-disabled={page >= pages}>
+              <a className="next" aria-disabled={page >= pages}>
                 Next
               </a>
             </Link>
@@ -68,3 +72,4 @@ const Pagination = props => {
 };
 
 export default Pagination;
+export { PAGINATION_QUERY };
