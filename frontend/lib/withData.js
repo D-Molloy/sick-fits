@@ -3,12 +3,12 @@
 import withApollo from "next-with-apollo";
 // apollo boost - bundling all the functionality of apollo-client, http requests, error handling, etc https://www.npmjs.com/package/apollo-boost
 import ApolloClient from "apollo-boost";
-import { endpoint } from "../config";
-import { LOCAL_STATE_QUERY, TOGGLE_CART_MUTATION } from "../components/Cart";
+import { endpoint, prodEndpoint } from "../config";
+import { LOCAL_STATE_QUERY } from "../components/Cart";
 // headers has to do with authentication
 function createClient({ headers }) {
   return new ApolloClient({
-    uri: process.env.NODE_ENV === "development" ? endpoint : endpoint,
+    uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
     // request is similar to express middleware
     request: operation => {
       operation.setContext({
