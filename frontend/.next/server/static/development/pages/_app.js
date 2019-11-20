@@ -850,20 +850,7 @@ var Nav = function Nav() {
         lineNumber: 21
       },
       __self: this
-    }, "Orders")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
-      href: "/me",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 23
-      },
-      __self: this
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 24
-      },
-      __self: this
-    }, "Account")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Signout__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }, "Orders")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Signout__WEBPACK_IMPORTED_MODULE_6__["default"], {
       __source: {
         fileName: _jsxFileName,
         lineNumber: 26
@@ -1079,11 +1066,12 @@ class Page extends Component {
 /*!**************************************!*\
   !*** ./components/RemoveFromCart.js ***!
   \**************************************/
-/*! exports provided: default */
+/*! exports provided: default, REMOVE_FROM_CART_MUTATION */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_FROM_CART_MUTATION", function() { return REMOVE_FROM_CART_MUTATION; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-apollo */ "react-apollo");
@@ -1231,6 +1219,7 @@ _defineProperty(RemoveFromCart, "propTypes", {
 });
 
 /* harmony default export */ __webpack_exports__["default"] = (RemoveFromCart);
+
 
 /***/ }),
 
@@ -1562,11 +1551,12 @@ var Signout = function Signout(props) {
 /*!******************************!*\
   !*** ./components/Stripe.js ***!
   \******************************/
-/*! exports provided: default */
+/*! exports provided: default, CREATE_ORDER_MUTATION */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_ORDER_MUTATION", function() { return CREATE_ORDER_MUTATION; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "@babel/runtime/regenerator");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
@@ -1673,10 +1663,10 @@ function (_React$Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 nprogress__WEBPACK_IMPORTED_MODULE_5___default.a.start(); // res.id is the payment token
+                // console.log("res", res.id);
+                // manually call createOrder mutation once we have the token
 
-                console.log("res", res.id); // manually call createOrder mutation once we have the token
-
-                _context.next = 4;
+                _context.next = 3;
                 return createOrder({
                   variables: {
                     token: res.id
@@ -1685,7 +1675,7 @@ function (_React$Component) {
                   alert(err.message);
                 });
 
-              case 4:
+              case 3:
                 order = _context.sent;
                 next_router__WEBPACK_IMPORTED_MODULE_4___default.a.push({
                   pathname: "/order",
@@ -1694,7 +1684,7 @@ function (_React$Component) {
                   }
                 });
 
-              case 6:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -1722,7 +1712,9 @@ function (_React$Component) {
         },
         __self: this
       }, function (_ref2) {
-        var me = _ref2.data.me;
+        var me = _ref2.data.me,
+            loading = _ref2.loading;
+        if (loading) return null;
         return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_apollo__WEBPACK_IMPORTED_MODULE_3__["Mutation"], {
           mutation: CREATE_ORDER_MUTATION,
           refetchQueries: [{
@@ -1730,7 +1722,7 @@ function (_React$Component) {
           }],
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 55
+            lineNumber: 57
           },
           __self: this
         }, function (createOrder) {
@@ -1750,7 +1742,7 @@ function (_React$Component) {
             },
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 60
+              lineNumber: 62
             },
             __self: this
           }, _this2.props.children);
@@ -1763,6 +1755,7 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Stripe);
+
 
 /***/ }),
 
