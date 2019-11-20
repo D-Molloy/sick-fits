@@ -33,7 +33,7 @@ class Stripe extends React.Component {
   onToken = async (res, createOrder) => {
     NProgress.start();
     // res.id is the payment token
-    console.log("res", res.id);
+    // console.log("res", res.id);
     // manually call createOrder mutation once we have the token
     const order = await createOrder({
       variables: {
@@ -51,36 +51,40 @@ class Stripe extends React.Component {
   render() {
     return (
       <User>
-        {({ data: { me } }) => (
-          <Mutation
-            mutation={CREATE_ORDER_MUTATION}
-            refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-          >
-            {createOrder => (
-              <StripeCheckout
-                amount={calcTotalPrice(me.cart)}
-                name="Sick Fits"
-                description={`Order of ${totalItems(me.cart)} items.`}
-                // select an item image to appear on the stripe checkout.  Could be a site logo. Wes shows an item from the cart
+        {({ data: { me }, loading }) => {
+          if (loading) return null;
+          return (
+            <Mutation
+              mutation={CREATE_ORDER_MUTATION}
+              refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+            >
+              {createOrder => (
+                <StripeCheckout
+                  amount={calcTotalPrice(me.cart)}
+                  name="Sick Fits"
+                  description={`Order of ${totalItems(me.cart)} items.`}
+                  // select an item image to appear on the stripe checkout.  Could be a site logo. Wes shows an item from the cart
 
-                image={
-                  me.cart.length && me.cart[0].item && me.cart[0].item.image
-                }
-                stripeKey="pk_test_hrdarMCPT2iY6Uu8CflnyFP800n8hI02Gu"
-                currency="USD"
-                email={me.email}
-                // what to do when we get the token back
-                // passing createOrder as an arg so that we don't call it until we have the token
-                token={res => this.onToken(res, createOrder)}
-              >
-                {this.props.children}
-              </StripeCheckout>
-            )}
-          </Mutation>
-        )}
+                  image={
+                    me.cart.length && me.cart[0].item && me.cart[0].item.image
+                  }
+                  stripeKey="pk_test_hrdarMCPT2iY6Uu8CflnyFP800n8hI02Gu"
+                  currency="USD"
+                  email={me.email}
+                  // what to do when we get the token back
+                  // passing createOrder as an arg so that we don't call it until we have the token
+                  token={res => this.onToken(res, createOrder)}
+                >
+                  {this.props.children}
+                </StripeCheckout>
+              )}
+            </Mutation>
+          );
+        }}
       </User>
     );
   }
 }
 
 export default Stripe;
+export { CREATE_ORDER_MUTATION };

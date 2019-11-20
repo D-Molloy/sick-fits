@@ -30,6 +30,7 @@ class RequestReset extends Component {
               await reset();
               this.setState({ email: "" });
             }}
+            data-test="form"
           >
             <fieldset disabled={loading} aria-busy={loading}>
               <h2>Request a password reset</h2>
@@ -59,3 +60,5 @@ class RequestReset extends Component {
 }
 
 export default RequestReset;
+
+export { REQUEST_RESET_MUTATION };

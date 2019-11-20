@@ -43,7 +43,7 @@ class Order extends Component {
           if (loading) return <p>Loading...</p>;
           const { order } = data;
           return (
-            <OrderStyles>
+            <OrderStyles data-test="order">
               <Head>
                 <title>Sick Fits - Order {order.id}</title>
               </Head>
@@ -68,23 +68,18 @@ class Order extends Component {
                 <span>{order.items.length}</span>
               </p>
               <div className="items">
-                {order.items.map(
-                  item =>
-                    console.log(item) || (
-                      <div className="order-item" key={item.id}>
-                        <img src={item.image} alt={item.title} />
-                        <div className="item-details">
-                          <h2>{item.title}</h2>
-                          <p>{item.description}</p>
-                          <p>Quantity: {item.quantity}</p>
-                          <p>Each: {formatMoney(item.price)}</p>
-                          <p>
-                            Subtotal: {formatMoney(item.price * item.quantity)}
-                          </p>
-                        </div>
-                      </div>
-                    )
-                )}
+                {order.items.map(item => (
+                  <div className="order-item" key={item.id}>
+                    <img src={item.image} alt={item.title} />
+                    <div className="item-details">
+                      <h2>{item.title}</h2>
+                      <p>{item.description}</p>
+                      <p>Quantity: {item.quantity}</p>
+                      <p>Each: {formatMoney(item.price)}</p>
+                      <p>Subtotal: {formatMoney(item.price * item.quantity)}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </OrderStyles>
           );
@@ -94,3 +89,4 @@ class Order extends Component {
   }
 }
 export default Order;
+export { SINGLE_ORDER_QUERY };
