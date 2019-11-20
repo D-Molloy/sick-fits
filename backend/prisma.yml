@@ -2,7 +2,7 @@
 endpoint: https://dkm-sickfits-prod-8e1baf2f63.herokuapp.com/dkm-sickfits-service/prod
 
 datamodel: datamodel.prisma
-secret: ${env:PRISMA_ENDPOINT}
+secret: ${env:PRISMA_SECRET}
 hooks:
   post-deploy:
     - graphql get-schema -p prisma
