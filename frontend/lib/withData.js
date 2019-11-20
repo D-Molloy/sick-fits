@@ -10,6 +10,7 @@ function createClient({ headers }) {
   return new ApolloClient({
     uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
     // request is similar to express middleware
+    // changed from headers by itself to the below:
     request: operation => {
       operation.setContext({
         fetchOptions: {
