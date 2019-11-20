@@ -36,7 +36,7 @@ const Pagination = props => {
               </title>
             </Head>
             <Link
-              // in production this will prerender the page (only works in development)
+              // in production this will prerender the page (only works in production)
               prefetch
               href={{
                 pathname: "items",

@@ -1,3 +1,7 @@
+/**
+ * - MUTATIONS!!
+ */
+
 import { mount } from "enzyme";
 import wait from "waait";
 import toJSON from "enzyme-to-json";
@@ -36,10 +40,13 @@ describe("<CreateItem/>", () => {
     const input = wrapper.find('input[type="file"]');
     input.simulate("change", { target: { files: ["fakedog.jpg"] } });
     await wait();
+    // .instance shows all details of the component
     const component = wrapper.find("CreateItem").instance();
     expect(component.state.image).toEqual(dogImage);
     expect(component.state.largeImage).toEqual(dogImage);
     expect(global.fetch).toHaveBeenCalled();
+
+    // return fetch to the original global state
     global.fetch.mockReset();
   });
 
@@ -52,16 +59,12 @@ describe("<CreateItem/>", () => {
     wrapper
       .find("#title")
       .simulate("change", { target: { value: "Testing", name: "title" } });
-    wrapper
-      .find("#price")
-      .simulate("change", {
-        target: { value: 50000, name: "price", type: "number" }
-      });
-    wrapper
-      .find("#description")
-      .simulate("change", {
-        target: { value: "This is a really nice item", name: "description" }
-      });
+    wrapper.find("#price").simulate("change", {
+      target: { value: 50000, name: "price", type: "number" }
+    });
+    wrapper.find("#description").simulate("change", {
+      target: { value: "This is a really nice item", name: "description" }
+    });
 
     expect(wrapper.find("CreateItem").instance().state).toMatchObject({
       title: "Testing",
@@ -69,6 +72,7 @@ describe("<CreateItem/>", () => {
       description: "This is a really nice item"
     });
   });
+
   it("creates an item when the form is submitted", async () => {
     const item = fakeItem();
     const mocks = [
@@ -104,16 +108,12 @@ describe("<CreateItem/>", () => {
     wrapper
       .find("#title")
       .simulate("change", { target: { value: item.title, name: "title" } });
-    wrapper
-      .find("#price")
-      .simulate("change", {
-        target: { value: item.price, name: "price", type: "number" }
-      });
-    wrapper
-      .find("#description")
-      .simulate("change", {
-        target: { value: item.description, name: "description" }
-      });
+    wrapper.find("#price").simulate("change", {
+      target: { value: item.price, name: "price", type: "number" }
+    });
+    wrapper.find("#description").simulate("change", {
+      target: { value: item.description, name: "description" }
+    });
     // mock the router
     Router.router = { push: jest.fn() };
     wrapper.find("form").simulate("submit");
