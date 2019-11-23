@@ -88,7 +88,8 @@ const mutations = {
           ...args,
           password,
           // define newly created user permissions here
-          permissions: { set: ["USER", "ADMIN"] }
+          // permissions: { set: ["USER", "ADMIN"] }
+          permissions: { set: ["USER"] }
         }
       },
       info
