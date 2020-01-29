@@ -17,9 +17,9 @@ function createClient({ headers }) {
     // changed from headers by itself to the below:
     request: operation => {
       operation.setContext({
-        fetchOptions: {
-          credentials: "include"
-        },
+        // fetchOptions: {
+        //   credentials: "include"
+        // },
         headers: { cookie: headers && headers.cookie }
       });
     },
