@@ -8,11 +8,7 @@ const db = require("./db");
 const server = createServer();
 
 server.express.use(cookieParser());
-// server.express.use(cors());
-server.express.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
+
 // decode the JWT so we can get the user Id on each request
 server.express.use((req, res, next) => {
   const { token } = req.cookies;
@@ -40,8 +36,8 @@ server.express.use(async (req, res, next) => {
 server.start(
   {
     cors: {
-      credentials: true,
-      origin: process.env.FRONTEND_URL
+      // credentials: true,
+      origin: "*"
     }
   },
   deets => {
