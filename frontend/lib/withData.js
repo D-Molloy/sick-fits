@@ -5,10 +5,14 @@ import withApollo from "next-with-apollo";
 import ApolloClient from "apollo-boost";
 import { endpoint, prodEndpoint } from "../config";
 import { LOCAL_STATE_QUERY } from "../components/Cart";
+
+const URI = process.env.NODE_ENV === "development" ? endpoint : prodEndpoint
+console.log("THIS IS THE REQUEST URI - ", URI);
+
 // headers has to do with authentication
 function createClient({ headers }) {
   return new ApolloClient({
-    uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
+    uri: URI,
     // request is similar to express middleware
     // changed from headers by itself to the below:
     request: operation => {
